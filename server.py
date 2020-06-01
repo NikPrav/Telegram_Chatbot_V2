@@ -1,15 +1,20 @@
-from chatbot import tel_chatbot
+from bot import tel_chatbot 
 
 update_id = None
+bot = tel_chatbot("config.cfg")
 
 def make_reply(msg):
 	if msg is not None:
 		reply = 'Hellew'
 	return reply
+
+
 while True:
-	print "..."
+	print ("...")
 	updates = bot.get_updates(offset = update_id)
-	updates = updates("result")
+	updates = updates["result"]
+
+
 	if updates:
 		for item in updates:
 			update_id = item["update_id"]
