@@ -18,9 +18,19 @@ class tel_chatbot():
 		return json.loads(r.content)
 
 	def send_message(self, msg, chatid):
-		url = self.base + "/sendMessage?chat_id={}&text={}".format(chatid,msg)
-		if msg is not None:
-			requests.get(url)
+		print(type(msg))
+		if type(msg) is str:
+			print('Only one in msg')
+			url = self.base + "/sendMessage?chat_id={}&text={}".format(chatid,msg)
+			if msg is not None:
+				requests.get(url)
+		else:
+			if msg is not None:
+				for txt in msg:
+					print('multiple in msg')
+					url = self.base + "/sendMessage?chat_id={}&text={}".format(chatid,txt)
+					requests.get(url)
+			
 
 	def read_from_cfg(self,config):
 		parser = cfg.ConfigParser()
