@@ -19,11 +19,12 @@ cal = Calendar(text)
 # k = None
 
 def within_limits(x = None):
-	# cur_date = datetime.datetime.now();
+	cur_date = datetime.datetime.now();
+	cur_date = utc.localize(cur_date) 
 	val = []
 	for e in list(cal.timeline):
 		# e.begin = utc.localize(e.begin)
-		if e.begin < x :
+		if e.begin < x and e.begin > cur_date:
 			val.append("{} is {} ".format(e.name, e.begin.humanize()))
 
 	return val

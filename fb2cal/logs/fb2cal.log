@@ -1,0 +1,40 @@
+[2020-06-02 21:26:04,390] fb2cal INFO (<module>) Starting fb2cal v1.0.4 (Production) [https://git.io/fjMwr]
+[2020-06-02 21:26:04,390] fb2cal INFO (<module>) This project is released under the GPLv3 license.
+[2020-06-02 21:26:04,390] fb2cal INFO (main) Attemping to parse config file config.ini...
+[2020-06-02 21:26:04,390] fb2cal INFO (main) Config successfully loaded.
+[2020-06-02 21:26:04,390] fb2cal INFO (main) Logging level set to: INFO
+[2020-06-02 21:26:04,391] fb2cal INFO (main) Attemping to authenticate with Facebook...
+[2020-06-02 21:26:09,777] fb2cal INFO (main) Successfully authenticated with Facebook.
+[2020-06-02 21:26:09,777] fb2cal INFO (main) Fetching all Birthdays via async endpoint...
+[2020-06-02 21:26:09,778] fb2cal INFO (get_async_birthdays) Processing birthdays for month June.
+[2020-06-02 21:26:11,730] fb2cal INFO (get_async_birthdays) Found 38 birthdays for month June.
+[2020-06-02 21:26:11,731] fb2cal INFO (get_async_birthdays) Processing birthdays for month July.
+[2020-06-02 21:26:12,119] fb2cal INFO (get_async_birthdays) Found 36 birthdays for month July.
+[2020-06-02 21:26:12,119] fb2cal INFO (get_async_birthdays) Processing birthdays for month August.
+[2020-06-02 21:26:12,510] fb2cal INFO (get_async_birthdays) Found 29 birthdays for month August.
+[2020-06-02 21:26:12,510] fb2cal INFO (get_async_birthdays) Processing birthdays for month September.
+[2020-06-02 21:26:12,893] fb2cal INFO (get_async_birthdays) Found 45 birthdays for month September.
+[2020-06-02 21:26:12,894] fb2cal INFO (get_async_birthdays) Processing birthdays for month October.
+[2020-06-02 21:26:13,319] fb2cal INFO (get_async_birthdays) Found 45 birthdays for month October.
+[2020-06-02 21:26:13,320] fb2cal INFO (get_async_birthdays) Processing birthdays for month November.
+[2020-06-02 21:26:13,692] fb2cal INFO (get_async_birthdays) Found 23 birthdays for month November.
+[2020-06-02 21:26:13,692] fb2cal INFO (get_async_birthdays) Processing birthdays for month December.
+[2020-06-02 21:26:14,092] fb2cal INFO (get_async_birthdays) Found 30 birthdays for month December.
+[2020-06-02 21:26:14,093] fb2cal INFO (get_async_birthdays) Processing birthdays for month January.
+[2020-06-02 21:26:14,475] fb2cal INFO (get_async_birthdays) Found 25 birthdays for month January.
+[2020-06-02 21:26:14,476] fb2cal INFO (get_async_birthdays) Processing birthdays for month February.
+[2020-06-02 21:26:14,862] fb2cal INFO (get_async_birthdays) Found 22 birthdays for month February.
+[2020-06-02 21:26:14,863] fb2cal INFO (get_async_birthdays) Processing birthdays for month March.
+[2020-06-02 21:26:15,266] fb2cal INFO (get_async_birthdays) Found 36 birthdays for month March.
+[2020-06-02 21:26:15,266] fb2cal INFO (get_async_birthdays) Processing birthdays for month April.
+[2020-06-02 21:26:15,661] fb2cal INFO (get_async_birthdays) Found 36 birthdays for month April.
+[2020-06-02 21:26:15,661] fb2cal INFO (get_async_birthdays) Processing birthdays for month May.
+[2020-06-02 21:26:16,130] fb2cal INFO (get_async_birthdays) Found 47 birthdays for month May.
+[2020-06-02 21:26:16,130] fb2cal INFO (main) A total of 412 birthdays were found.
+[2020-06-02 21:26:16,130] fb2cal INFO (main) Creating birthday ICS file...
+[2020-06-02 21:26:16,240] fb2cal INFO (main) ICS file created successfully.
+[2020-06-02 21:26:16,262] fb2cal INFO (main) Saving ICS file to local file system...
+[2020-06-02 21:26:16,262] fb2cal INFO (main) Successfully saved ICS file to /home/nikhil_praveen/Documents/Lambda/chatbot_frnds/fb2cal/fb2cal/src/files/birthdays.ics
+[2020-06-02 21:26:16,262] fb2cal INFO (main) Saving changes to config file...
+[2020-06-02 21:26:16,263] fb2cal INFO (main) Successfully saved changes to config file.
+[2020-06-02 21:26:16,263] fb2cal INFO (main) Done! Terminating gracefully.
