@@ -5,5 +5,7 @@ Things this has:
 
 - a bot.py file that has all the script related to the bot
 - a server.py file for server deployment
-- a facebook.py file that handles the interface with facebook api
+- a ics2python.py file that handles the interface with .ics file
+- fb2cal that does all the hard work
+
 
