@@ -5,9 +5,9 @@ import pytz
 from dateutil.relativedelta import relativedelta
 utc=pytz.UTC
 
-# from fb2cal.src._version import __version_info__, __version__
-from src.__init__ import *
-import src.fb2cal
+# # from fb2cal.src._version import __version_info__, __version__
+# from src.__init__ import *
+# import src.fb2cal
 
 update_id = None
 config = "config.cfg"
