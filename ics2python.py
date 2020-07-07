@@ -19,7 +19,7 @@ cal = Calendar(text)
 # k = None
 
 def within_limits(x = None):
-	cur_date = datetime.datetime.now();
+	cur_date = datetime.datetime.now()
 	cur_date = utc.localize(cur_date) 
 	val = []
 	for e in list(cal.timeline):

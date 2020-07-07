@@ -9,7 +9,7 @@ class tel_chatbot():
 		self.base = "https://api.telegram.org/bot{}".format(self.token)
 
 	def get_updates(self, offset = None):
-		url = self.base + "/getUpdates?timeout=100";
+		url = self.base + "/getUpdates?timeout=100"
 		if offset:
 			url = url + "&offset={}".format(offset + 1)
 
@@ -39,7 +39,7 @@ class tel_chatbot():
 
 	def read_uname_from_cfg(self,cofig,uid):
 		parser = cfg.ConfigParser()
-		parser.read(cofg)
+		parser.read(cofig)
 		# print(parser.get('uname_{}'.format(uid),'uname'))
 		try:
 			uname = parser.get('uname_{}'.format(uid),'uname')
