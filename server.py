@@ -10,7 +10,7 @@ utc=pytz.UTC
 # import src.fb2cal
 
 update_id = None
-config = "config.cfg"
+config = "config.cfg" 
 config_user = "config/config.ini"
 bot = tel_chatbot(config)
 flag = 0
@@ -22,11 +22,11 @@ def make_reply(msg):
 
 	reply = None
 	print(msg)
-	if msg == '\\start':
-		reply = 'Hellew. Try giving a duration: If you want to change your username/password,try \\uname'
+	if msg == '/start':
+		reply = 'Hellew. Try giving a duration: If you want to change your username/password,try /uname'
 		flag = 0
 
-	elif msg == '\\uname':
+	elif msg == '/uname':
 		try:
 			frm = item["message"]["from"]["id"]
 		except:
