@@ -4,10 +4,12 @@ import configparser as cfg
 
 class tel_chatbot():
 
+	#Initialisation code
 	def __init__(self, config):
 		self.token = self.read_token_from_cfg(config)
 		self.base = "https://api.telegram.org/bot{}".format(self.token)
 
+	#Gets replies
 	def get_updates(self, offset = None):
 		url = self.base + "/getUpdates?timeout=100"
 		if offset:
@@ -17,6 +19,7 @@ class tel_chatbot():
 
 		return json.loads(r.content)
 
+	#Sends Message
 	def send_message(self, msg, chatid):
 		# print(type(msg))
 		if type(msg) is str:
@@ -31,12 +34,13 @@ class tel_chatbot():
 					url = self.base + "/sendMessage?chat_id={}&text={}".format(chatid,txt)
 					requests.get(url)
 			
-
+	#Reads the bot_config file and returns the bot token
 	def read_token_from_cfg(self,config):
 		parser = cfg.ConfigParser()
 		parser.read(config)
 		return parser.get('creds', 'token')
 
+	#Reads username and password from given config
 	def read_uname_from_cfg(self,cofig,uid):
 		parser = cfg.ConfigParser()
 		parser.read(cofig)
@@ -52,6 +56,8 @@ class tel_chatbot():
 		# print(x)
 		return uname,passwd
 
+
+	#Writes username and password to config
 	def write_uname_to_cfg(self,cofg,uid,uname,passwd):
 		# print(cofig)
 		parser = cfg.ConfigParser()

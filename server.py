@@ -10,11 +10,20 @@ utc=pytz.UTC
 # import src.fb2cal
 
 update_id = None
+#path to bot config that stores bot api
 config = "config.cfg" 
+
+#Path to the fb2cal config file that stores user id and password
 config_user = "config/config.ini"
+#NOTE:Needs to merge these 2 into one dem config file
 bot = tel_chatbot(config)
 flag = 0
-# Think up of a solid state machine to handle the whole shit, cos you definitely need one for that
+
+
+
+#NOTE:Think up of a solid state machine to handle the whole shit, cos you definitely need one for that
+
+#Function that handles the reply statement
 def make_reply(msg):
 	global update_id
 	global config
@@ -22,10 +31,12 @@ def make_reply(msg):
 
 	reply = None
 	print(msg)
+	#Welcome message
 	if msg == '/start':
 		reply = 'Hellew. Try giving a duration: If you want to change your username/password,try /uname'
 		flag = 0
 
+	#Adding the fb uname and password
 	elif msg == '/uname':
 		try:
 			frm = item["message"]["from"]["id"]
@@ -34,6 +45,10 @@ def make_reply(msg):
 		
 		bot.send_message("Enter your fb username:",from_)
 		print ("Waiting for username...")
+		#Reading the reply
+		#NOTE: Not the most elegant way, or the most optimised, need to write a proper function to handle this
+		#May crash if the user takes too long to reply
+		
 		updates = bot.get_updates(offset = update_id)
 		updates = updates["result"]
 
@@ -61,20 +76,26 @@ def make_reply(msg):
 			message = None
 
 		passwd = message
+		
+		#After the uname and passwd is extracted, it is then written to the fb2cal config file, with a uid tag
 		# print("passwd = ",passwd)
 		print(frm)
 		bot.write_uname_to_cfg(config_user,frm,uname,passwd)
 		reply = "Success!!"
 
+	#Printing the birthdays using a duration
 	else:
 		try:
 			buffer = msg.split(' ')
 			print(type(buffer[1]))
 			print(type('month'))
 			print(buffer[1])
-			if buffer[0] > '0' and buffer[0] < '9':
+			#Splits the message into 2 parts, assuming that it is in the format "<num> <unit>"
+			# if buffer[0] > '0' and buffer[0] < '9':
+			try:
+				no = int(buffer[0])				
 				if buffer[1] == 'month' or buffer[1] == 'months' :
-					no = int(buffer[0])
+					# no = int(buffer[0])
 					print("Inside month, ",no)
 					k = datetime.datetime.now() + relativedelta(months = no)
 					print("yo")
@@ -82,20 +103,24 @@ def make_reply(msg):
 					reply = within_limits(k)
 					print("Trying for reply, ",reply)
 
-				if buffer[1] == 'day' or buffer[1] == 'days':
-					no = int(buffer[0])
+				elif buffer[1] == 'day' or buffer[1] == 'days':
+					# no = int(buffer[0])
 					print("Inside day, ",no)				
 					k = datetime.datetime.now() + relativedelta(days = no)
 					k = utc.localize(k) 
 					print(k)
 					reply = within_limits(k) 
 
-				if buffer[1] == 'week' or buffer[1] == 'weeks':
-					no = int(buffer[0])
+				elif buffer[1] == 'week' or buffer[1] == 'weeks':
+					# no = int(buffer[0])
 					print("Inside week, ",no)
 					k = datetime.datetime.now() + relativedelta(weeks = no)
 					k = utc.localize(k) 
 					reply = within_limits(k)
+				else:
+					reply = "Try Again"
+			except:
+				reply = "Try Again"
 
 		except:
 			reply = "Try Again"  
@@ -103,13 +128,13 @@ def make_reply(msg):
 	print("reply is ", reply)
 	return reply
 
-
+#The infinite loop that checks for replies
 while True:
 	print ("...")
 	updates = bot.get_updates(offset = update_id)
 	updates = updates["result"]
 	print(update_id)
-
+	#If a new update is found
 	if updates:
 		for item in updates:
 			update_id = item["update_id"]

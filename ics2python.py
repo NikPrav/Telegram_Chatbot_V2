@@ -1,3 +1,4 @@
+# Handles parsing the .ics file
 from ics import Calendar
 import datetime
 import pytz
@@ -7,6 +8,7 @@ import numpy as np
 
 utc=pytz.UTC
 # import fi
+# .ics file location
 src = "files/birthdays.ics"
 file = open(src,"r")
 text = file.read()
@@ -18,6 +20,7 @@ cal = Calendar(text)
 
 # k = None
 
+# Reading the .ics file and returning values/events within a given time frame
 def within_limits(x = None):
 	cur_date = datetime.datetime.now()
 	cur_date = utc.localize(cur_date) 
