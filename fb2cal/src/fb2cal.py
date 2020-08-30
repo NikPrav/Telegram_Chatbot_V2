@@ -101,7 +101,7 @@ def fb2cal(user = ''):
     logger.info(f'Logging level set to: {logging.getLevelName(logger.level)}')
 
     # Authenticate with Google API early
-    if util.strtobool(config['DRIVE']['UPLOAD_TO_DRIVE']):
+    if util.strtobool(config[f'DRIVE{user}']['UPLOAD_TO_DRIVE']):
         logger.info('Authenticating with Google Drive API...')
         service = google_drive_api_authenticate()
         logger.info('Successfully authenticated with Google Drive API.')
@@ -112,7 +112,7 @@ def fb2cal(user = ''):
 
     # Attempt login
     logger.info('Attemping to authenticate with Facebook...')
-    facebook_authenticate(browser, config['AUTH'+user]['FB_EMAIL'+user], config['AUTH']['FB_PASS'])
+    facebook_authenticate(browser, config[f'AUTH{user}']['FB_EMAIL'], config[f'AUTH{user}']['FB_PASS'])
     logger.info('Successfully authenticated with Facebook.')
 
     # Get birthday objects for all friends via async endpoint
@@ -135,33 +135,33 @@ def fb2cal(user = ''):
     logger.debug(f'ics_str: {ics_str}')
 
     # Save to file system
-    if util.strtobool(config['FILESYSTEM']['SAVE_TO_FILE']):
+    if util.strtobool(config[f'FILESYSTEM{user}']['SAVE_TO_FILE']):
         logger.info(f'Saving ICS file to local file system...')
 
-        if not os.path.exists(os.path.dirname(config['FILESYSTEM']['ICS_FILE_PATH'+user])):
-            os.makedirs(os.path.dirname(config['FILESYSTEM']['ICS_FILE_PATH'+user]), exist_ok=True)
+        if not os.path.exists(os.path.dirname(config[f'FILESYSTEM{user}']['ICS_FILE_PATH'+user])):
+            os.makedirs(os.path.dirname(config[f'FILESYSTEM{user}']['ICS_FILE_PATH'+user]), exist_ok=True)
 
-        with open(config['FILESYSTEM']['ICS_FILE_PATH'], mode='w', encoding="UTF-8") as ics_file:
+        with open(config[f'FILESYSTEM{user}']['ICS_FILE_PATH'], mode='w', encoding="UTF-8") as ics_file:
             ics_file.write(ics_str)
-        logger.info(f'Successfully saved ICS file to {os.path.abspath(config["FILESYSTEM"]["ICS_FILE_PATH"])}')
+        logger.info(f'Successfully saved ICS file to {os.path.abspath(config[f"FILESYSTEM{user}"]["ICS_FILE_PATH"])}')
 
     # Upload to drive
-    if util.strtobool(config['DRIVE']['UPLOAD_TO_DRIVE']):
+    if util.strtobool(config[f'DRIVE{user}']['UPLOAD_TO_DRIVE']):
         logger.info('Uploading ICS file to Google Drive...')
-        metadata = {'name': config['DRIVE']['ICS_FILE_NAME']}
+        metadata = {'name': config[f'DRIVE{user}']['ICS_FILE_NAME']}
         UPLOAD_RETRY_ATTEMPTS = 3
         uploaded_successfully = False
 
         for attempt in range(UPLOAD_RETRY_ATTEMPTS):
             try:
-                updated_file = upload_and_replace_file(service, config['DRIVE']['DRIVE_FILE_ID'], metadata, bytearray(ics_str, 'utf-8')) # Pass payload as bytes
-                config.set('DRIVE', 'DRIVE_FILE_ID', updated_file['id'])
+                updated_file = upload_and_replace_file(service, config[f'DRIVE{user}']['DRIVE_FILE_ID'], metadata, bytearray(ics_str, 'utf-8')) # Pass payload as bytes
+                config.set(f'DRIVE{user}', 'DRIVE_FILE_ID', updated_file['id'])
                 uploaded_successfully = True
             except HttpError as e:
                 if e.resp.status == 404: # file not found
-                    if config['DRIVE']['DRIVE_FILE_ID']:
+                    if config[f'DRIVE{user}']['DRIVE_FILE_ID']:
                         logger.warning(f'{e}. Resetting stored file id in config and trying again. Attempt: {attempt+1}')
-                        config.set('DRIVE', 'DRIVE_FILE_ID', '') # reset stored file_id
+                        config.set(f'DRIVE{user}', 'DRIVE_FILE_ID', '') # reset stored file_id
                         continue
                     else:
                         logger.error(e)
@@ -171,9 +171,9 @@ def fb2cal(user = ''):
                     raise SystemError
     
         if uploaded_successfully:
-            logger.info(f'Successfully uploaded {config["DRIVE"]["ICS_FILE_NAME"]} to Google Drive with file id: {config["DRIVE"]["DRIVE_FILE_ID"]}\nDirect download link: http://drive.google.com/uc?export=download&id={config["DRIVE"]["DRIVE_FILE_ID"]}')
+            logger.info(f'Successfully uploaded {config[f"DRIVE{user}"]["ICS_FILE_NAME"]} to Google Drive with file id: {config[f"DRIVE{user}"]["DRIVE_FILE_ID"]}\nDirect download link: http://drive.google.com/uc?export=download&id={config["DRIVE"]["DRIVE_FILE_ID"]}')
         else:
-            logger.error(f'Failed to upload {config["DRIVE"]["ICS_FILE_NAME"]} to Google Drive after {UPLOAD_RETRY_ATTEMPTS} attempts.')
+            logger.error(f'Failed to upload {config[f"DRIVE{user}"]["ICS_FILE_NAME"]} to Google Drive after {UPLOAD_RETRY_ATTEMPTS} attempts.')
             raise SystemError
 
     # Update config file with updated file id for subsequent runs
@@ -740,11 +740,17 @@ if __name__ == '__main__':
     logger = setup_custom_logger('fb2cal')
     logger.info(f'Starting fb2cal v{__version__} ({__status__}) [{__website__}]')
     logger.info(f'This project is released under the {__license__} license.')
+    try:
+        user = sys.argv[1]
+    except:
+        user = ''
+        print("Exception called")
 
     try:
-        fb2cal()
+        fb2cal(user)
     except SystemExit:
         logger.critical(f'Critical error encountered. Terminating.')
         sys.exit()
     finally:
         logging.shutdown()
+

@@ -7,21 +7,18 @@ import numpy as np
 # from bot import tel_chatbot 
 
 utc=pytz.UTC
-# import fi
 # .ics file location
-src = "files/birthdays.ics"
-file = open(src,"r")
-text = file.read()
-cal = Calendar(text)
 
-# for e in list(cal.timeline):
-# 	# e = list(cal.timeline)[0]
-# 	print("{} is {} ".format(e.name, e.begin))
 
-# k = None
 
 # Reading the .ics file and returning values/events within a given time frame
-def within_limits(x = None):
+def within_limits(frm,x = None):
+	src = f"fb2cal/files/birthdays{frm}.ics"
+	file = open(src,"r")
+	print("File Successfully opened")
+	text = file.read()
+	cal = Calendar(text)
+
 	cur_date = datetime.datetime.now()
 	cur_date = utc.localize(cur_date) 
 	val = []
@@ -31,9 +28,3 @@ def within_limits(x = None):
 			val.append("{} is {} ".format(e.name, e.begin.humanize()))
 
 	return val
-
-
-# k = datetime.datetime.now() + relativedelta(months = 2)
-# k = utc.localize(k) 
-# y = within_limits(k)
-# print(y)
