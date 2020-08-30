@@ -5,6 +5,7 @@ import pytz
 from dateutil.relativedelta import relativedelta
 utc=pytz.UTC
 import os
+import configparser as cfg
 
 # # from fb2cal.src._version import __version_info__, __version__
 # from src.__init__ import *
@@ -15,7 +16,7 @@ update_id = None
 config = "config.cfg" 
 
 #Path to the fb2cal config file that stores user id and password
-config_user = "config/config.ini"
+config_user = "fb2cal/config/config.ini"
 #NOTE:Needs to merge these 2 into one dem config file
 bot = tel_chatbot(config)
 flag = 0
@@ -40,7 +41,7 @@ def make_reply(msg, frm):
 
 
 def start_msg(msg,frm):
-    reply = 'Hellew. Try giving a duration: If you want to change your username/password,try /uname'
+    reply = 'Hellew. Try giving a duration. First time? Change your username/password with /uname and create all files with /update'
     bot.send_message(reply,frm)
 	# return reply
 
@@ -51,6 +52,7 @@ def uname_config(msg,frm):
 	#Reading the reply
 	#NOTE: Not the most elegant way, or the most optimised, need to write a proper function to handle this
 	#May crash if the user takes too long to reply
+	# May give the wrong output if more than one user chats with the bot
 	
 	updates = bot.get_updates(offset = update_id)
 	updates = updates["result"]
@@ -83,12 +85,24 @@ def uname_config(msg,frm):
 	bot.write_uname_to_cfg(config_user,frm,uname,passwd)
 	reply = "Success!!"
 	bot.send_message(reply,frm)
+	parser = cfg.ConfigParser()
+	parser.read(config_user)
+	# checks if the current users creds are available
+	if not(parser.has_section(f"DRIVE{frm}")):
+		bot.init__drivefield(config_user,frm,uname,passwd)
 
+# Runs the fb2cal code
 def update_ics(msg,frm):
-	os.system(f'python src/fb2cal.py {frm}')
+	parser = cfg.ConfigParser()
+	parser.read(config_user)
+	# checks if the current users creds are available
+	if parser.has_option(f"AUTH{frm}","fb_email"):
+		os.system(f'python src/fb2cal.py {frm}')
+	else:
+		bot.send_message("Sorry, no username/ password found. Run the /uname command and try again",frm)
 	print("Exec")
 
-
+# THe default function, that gives all the birthdays in a given period
 def def_func(msg,frm):
 	try:
 		buffer = msg.split(' ')
@@ -96,7 +110,7 @@ def def_func(msg,frm):
 		print(type('month'))
 		print(buffer[1])
 		# Splits the message into 2 parts, assuming that it is in the format "<num> <unit>"
-		if buffer[0] > '0' and buffer[0] < '9':
+		if buffer[0] >= '0' and buffer[0] <= '9':
 			try:
 				no = int(buffer[0])				
 				if buffer[1] == 'month' or buffer[1] == 'months' :
@@ -105,7 +119,7 @@ def def_func(msg,frm):
 					k = datetime.datetime.now() + relativedelta(months = no)
 					print("yo")
 					k = utc.localize(k) 
-					reply = within_limits(k)
+					reply = within_limits(frm, k)
 					print("Trying for reply, ",reply)
 				elif buffer[1] == 'day' or buffer[1] == 'days':
 					# no = int(buffer[0])
@@ -113,14 +127,14 @@ def def_func(msg,frm):
 					k = datetime.datetime.now() + relativedelta(days = no)
 					k = utc.localize(k) 
 					print(k)
-					reply = within_limits(k) 
+					reply = within_limits(frm,k) 
 
 				elif buffer[1] == 'week' or buffer[1] == 'weeks':
 					# no = int(buffer[0])
 					print("Inside week, ",no)
 					k = datetime.datetime.now() + relativedelta(weeks = no)
 					k = utc.localize(k) 
-					reply = within_limits(k)
+					reply = within_limits(frm,k)
 				else:
 					reply = "Try Again"
 			except:
