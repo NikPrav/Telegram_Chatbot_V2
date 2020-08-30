@@ -13,7 +13,7 @@ utc=pytz.UTC
 
 # Reading the .ics file and returning values/events within a given time frame
 def within_limits(frm,x = None):
-	src = f"fb2cal/files/birthdays{frm}.ics"
+	src = f"fb2cal/src/files/birthdays{frm}.ics"
 	file = open(src,"r")
 	print("File Successfully opened")
 	text = file.read()
