@@ -67,8 +67,29 @@ class tel_chatbot():
 		if sec not in parser:
 			parser.add_section(sec)
 		
-		parser[sec]['uname'] = uname
-		parser[sec]['passwd'] = passwd
+		parser[sec]['fb_email'] = uname
+		parser[sec]['fb_pass'] = passwd
+		# print(parser[sec]['uname'])
+		with open(cofg,'w') as cfgfile: 
+			parser.write(cfgfile)
+	
+	def init__drivefield(self,cofg,uid,uname,passwd):
+		# print(cofig)
+		parser = cfg.ConfigParser()
+		parser.read(cofg)
+		sec = 'DRIVE{}'.format(uid)
+		sec_file = f'FILESYSTEM{uid}'
+		# print(sec)
+		if sec not in parser:
+			parser.add_section(sec)
+		
+		if sec_file not in parser:
+			parser.add_section(sec_file)
+		
+		parser[sec_file]['save_to_file'] = "True"
+		parser[sec_file]['ics_file_path'] = f'files/birthdays{uid}.ics'
+		parser[sec]['upload_to_drive'] = 'false'
+		parser[sec]['ics_filename'] = f'birthdays{uid}.ics'
 		# print(parser[sec]['uname'])
 		with open(cofg,'w') as cfgfile: 
 			parser.write(cfgfile)
