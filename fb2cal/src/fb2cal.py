@@ -30,7 +30,7 @@ import urllib.parse
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-# from babel import Locale_version
+from babel import Locale
 from babel.core import UnknownLocaleError
 from babel.dates import format_date
 import html
@@ -138,8 +138,8 @@ def fb2cal(user = ''):
     if util.strtobool(config[f'FILESYSTEM{user}']['SAVE_TO_FILE']):
         logger.info(f'Saving ICS file to local file system...')
 
-        if not os.path.exists(os.path.dirname(config[f'FILESYSTEM{user}']['ICS_FILE_PATH'+user])):
-            os.makedirs(os.path.dirname(config[f'FILESYSTEM{user}']['ICS_FILE_PATH'+user]), exist_ok=True)
+        if not os.path.exists(os.path.dirname(config[f'FILESYSTEM{user}']['ICS_FILE_PATH'])):
+            os.makedirs(os.path.dirname(config[f'FILESYSTEM{user}']['ICS_FILE_PATH']), exist_ok=True)
 
         with open(config[f'FILESYSTEM{user}']['ICS_FILE_PATH'], mode='w', encoding="UTF-8") as ics_file:
             ics_file.write(ics_str)

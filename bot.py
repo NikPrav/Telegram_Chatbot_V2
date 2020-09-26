@@ -1,7 +1,7 @@
 import requests
 import json
 import configparser as cfg
-
+ 
 class tel_chatbot():
 
 	#Initialisation code
@@ -38,6 +38,7 @@ class tel_chatbot():
 	def read_token_from_cfg(self,config):
 		parser = cfg.ConfigParser()
 		parser.read(config)
+		print(parser.sections())
 		return parser.get('creds', 'token')
 
 	#Reads username and password from given config
